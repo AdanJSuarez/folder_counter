@@ -62,7 +62,6 @@ func (fr *FolderReader) Read(folderName string) {
 // setListOfFileStats is used to set listOfFileStats
 // A posible performance improvement could be insert files in order using BST (i.e.)
 func (fr *FolderReader) setListOfFileStats(folderName string, fileNames []string) {
-	log.Print(fileNames)
 	for _, name := range fileNames {
 		fileStat := filestat.FileStat{}
 		fr.readStats(folderName+"/"+name, &fileStat)

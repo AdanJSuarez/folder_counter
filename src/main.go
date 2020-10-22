@@ -15,6 +15,13 @@ import (
 	"github.com/AdanJSuarez/folder_counter/src/folderreader"
 )
 
+func textHeader() {
+	fmt.Println("")
+	fmt.Println("Type folder name or leave empty for actual folder")
+	fmt.Println("Type EXIT to close the program")
+	fmt.Println("---------------------")
+}
+
 func main() {
 	fr := folderreader.FolderReader{}
 
@@ -25,7 +32,7 @@ func main() {
 		fmt.Print("-> ")
 		text, _ := reader.ReadString('\n')
 		text = strings.Replace(text, "\n", "", -1)
-		if strings.ToLower(text) == "exit" {
+		if text == "EXIT" {
 			fmt.Println("Thanks for using our software ;)")
 			os.Exit(0)
 		}
@@ -37,11 +44,4 @@ func main() {
 		textHeader()
 	}
 
-}
-
-func textHeader() {
-	fmt.Println("")
-	fmt.Println("Type folder name or leave empty for actual folder")
-	fmt.Println("Type EXIT to close the program")
-	fmt.Println("---------------------")
 }
