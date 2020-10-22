@@ -15,7 +15,7 @@
 # vendor/
 
 # Binaries
-# bin
+bin
 
 # Visual Studio Code
 .vscode
