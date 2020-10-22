@@ -26,11 +26,12 @@ func main() {
 		text, _ := reader.ReadString('\n')
 		text = strings.Replace(text, "\n", "", -1)
 		if strings.ToLower(text) == "exit" {
+			fmt.Println("Thanks for using our software ;)")
 			os.Exit(0)
 		}
 		fr.Read(text)
 		fmt.Printf("Number of file: %v - Total size of the folder: %v\n", fr.GetTotalNumberOfFiles(), fr.GetTotalSize())
-		fmt.Println(fr.GetFilesStatsString())
+		fmt.Println("List of folders and files in a beautiful JSON format:\n", fr.GetFilesStatsString())
 		fr = folderreader.FolderReader{}
 		fmt.Println("* End of files *")
 		textHeader()
@@ -41,6 +42,6 @@ func main() {
 func textHeader() {
 	fmt.Println("")
 	fmt.Println("Type folder name or leave empty for actual folder")
-	fmt.Println("Type exit to close the program")
+	fmt.Println("Type EXIT to close the program")
 	fmt.Println("---------------------")
 }

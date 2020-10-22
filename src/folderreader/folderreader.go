@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"log"
 	"os"
+	"sort"
 
 	"github.com/AdanJSuarez/folder_counter/src/filestat"
 )
@@ -59,6 +60,7 @@ func (fr *FolderReader) Read(folderName string) {
 }
 
 // setListOfFileStats is used to set listOfFileStats
+// A posible performance improvement could be insert files in order using BST (i.e.)
 func (fr *FolderReader) setListOfFileStats(folderName string, fileNames []string) {
 	log.Print(fileNames)
 	for _, name := range fileNames {
@@ -68,6 +70,7 @@ func (fr *FolderReader) setListOfFileStats(folderName string, fileNames []string
 		fr.totalNumberOfFiles++
 		fr.filesStats = append(fr.filesStats, fileStat)
 	}
+	fr.sortBySize()
 }
 
 // readStats return the stats of a file of named fileName.
@@ -80,4 +83,11 @@ func (fr *FolderReader) readStats(fileName string, fileStat *filestat.FileStat) 
 	fileStat.SetFileSize(stats.Size())
 	fileStat.SetFileLastModification(stats.ModTime())
 	fileStat.SetIsDirectory(stats.IsDir())
+}
+
+// sortBySize set filesStats order by file size
+func (fr *FolderReader) sortBySize() {
+	sort.Slice(fr.filesStats, func(i, j int) bool {
+		return fr.filesStats[i].GetFileSize() > fr.filesStats[j].GetFileSize()
+	})
 }
