@@ -1,0 +1,4 @@
+# Build project for server linux.
+
+GOOS=linux GOARCH=amd64 go build -o bin/folderReader src/main.go
+echo "Compilation for Linux amd64, done!"
