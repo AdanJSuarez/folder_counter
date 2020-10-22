@@ -6,6 +6,7 @@ e: adanjsuarez@gmail.com
 package folderreader
 
 import (
+	"encoding/json"
 	"log"
 	"os"
 
@@ -15,51 +16,68 @@ import (
 // FolderReader is a structure to handle reading folders and files from a specific folder.
 // If not folder is specified takes the actual folder where it is running.
 type FolderReader struct {
-	filesStats []filestat.FileStat
+	filesStats         []filestat.FileStat
+	totalSize          int64
+	totalNumberOfFiles int64
 }
 
-// GetFileNames return a slice of all names
-func (fr *FolderReader) GetFileNames() []filestat.FileStat {
-	return fr.filesStats
+// GetFilesStatsString return a slice of all names
+func (fr *FolderReader) GetFilesStatsString() string {
+	jsonFileStats, err := json.MarshalIndent(fr.filesStats, "  ", "")
+	if err != nil {
+		log.Printf("Failed to marshal files stats: %v", err)
+	}
+	return string(jsonFileStats)
 }
 
-// Read set the name of folders and files to fileNames
-func (fr *FolderReader) Read(folderName string) []filestat.FileStat {
-	var result []filestat.FileStat
+// GetTotalSize return the total size of all files and folders
+func (fr *FolderReader) GetTotalSize() int64 {
+	return fr.totalSize
+}
+
+// GetTotalNumberOfFiles return the total number of file and folders
+func (fr *FolderReader) GetTotalNumberOfFiles() int64 {
+	return fr.totalNumberOfFiles
+}
+
+// Read is used to set files stats and total size and number of files.
+func (fr *FolderReader) Read(folderName string) {
 	if folderName == "" {
 		folderName = "."
 	}
 	file, err := os.Open(folderName)
 	if err != nil {
-		log.Printf("Failed opening directory: %v. Please check the name.", err)
+		log.Printf("Failed opening directory: '%v' Please check the name.", folderName)
 	}
 	defer file.Close()
 
-	fileNames, err := file.Readdirnames(0) // 0 to read all files and folders
+	fileNames, err := file.Readdirnames(0)
 	if err != nil {
 		log.Println("Failed to read files:", err)
 	}
-	for _, name := range fileNames {
-		fileStat := filestat.FileStat{}
-		fr.ReadStats(name, fileStat)
-		result = append(result, fileStat)
-	}
-	return result
+	fr.setListOfFileStats(folderName, fileNames)
 }
 
-// ReadStats return the stats of a file of named fileName.
-func (fr *FolderReader) ReadStats(fileName string, fileStat filestat.FileStat) {
-	//Gets stats of the file
+// setListOfFileStats is used to set listOfFileStats
+func (fr *FolderReader) setListOfFileStats(folderName string, fileNames []string) {
+	log.Print(fileNames)
+	for _, name := range fileNames {
+		fileStat := filestat.FileStat{}
+		fr.readStats(folderName+"/"+name, &fileStat)
+		fr.totalSize += fileStat.GetFileSize()
+		fr.totalNumberOfFiles++
+		fr.filesStats = append(fr.filesStats, fileStat)
+	}
+}
+
+// readStats return the stats of a file of named fileName.
+func (fr *FolderReader) readStats(fileName string, fileStat *filestat.FileStat) {
 	stats, err := os.Stat(fileName)
 	if err != nil {
 		log.Printf("Failed to read stats of %s: %v", fileName, err)
 	}
+	fileStat.SetFileName(fileName)
 	fileStat.SetFileSize(stats.Size())
 	fileStat.SetFileLastModification(stats.ModTime())
 	fileStat.SetIsDirectory(stats.IsDir())
-	//Prints stats of the file
-	// fmt.Printf("Permission: %s\n", stats.Mode())
-	// fmt.Printf("Size: %d\n", size)
-	// fmt.Printf("Modification Time: %s\n", lastModification)
-	// fmt.Printf("Is directory: %v\n", isFolder)
 }
