@@ -26,7 +26,7 @@ func main() {
 	} else if arg == "api" {
 		api.Init()
 	}
-	fmt.Printf("'%v' is not a valid argument you should pass 'api' or 'cli'\n", arg)
+	fmt.Printf("'%v' is not a valid argument, you should pass 'api' or 'cli'\n", arg)
 	os.Exit(0)
 
 }

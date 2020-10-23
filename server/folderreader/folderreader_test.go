@@ -20,7 +20,7 @@ func setup() {
 // It should return the right string representing the list of fileStats.
 func TestGetFileStatsString(t *testing.T) {
 	setup()
-	folderReader.filesStats = append(folderReader.filesStats, fileStat1)
+	folderReader.FilesStats = append(folderReader.FilesStats, fileStat1)
 	actual := folderReader.GetFilesStatsString()
 	expected := `
 	[
@@ -79,20 +79,20 @@ func TestReadNoneExistingFolder(t *testing.T) {
 // It should return a sorted by size list of fileStat.
 func TestSortBySize(t *testing.T) {
 	setup()
-	folderReader.filesStats = append(folderReader.filesStats, fileStat2)
-	folderReader.filesStats = append(folderReader.filesStats, fileStat3)
-	folderReader.filesStats = append(folderReader.filesStats, fileStat1)
+	folderReader.FilesStats = append(folderReader.FilesStats, fileStat2)
+	folderReader.FilesStats = append(folderReader.FilesStats, fileStat3)
+	folderReader.FilesStats = append(folderReader.FilesStats, fileStat1)
 
-	if folderReader.filesStats[0].FileSize != 200 || folderReader.filesStats[1].FileSize != 300 || folderReader.filesStats[2].FileSize != 100 {
-		t.Errorf("filesStats are not append in the right order: %v", folderReader.filesStats)
+	if folderReader.FilesStats[0].FileSize != 200 || folderReader.FilesStats[1].FileSize != 300 || folderReader.FilesStats[2].FileSize != 100 {
+		t.Errorf("filesStats are not append in the right order: %v", folderReader.FilesStats)
 	}
 
 	folderReader.sortBySize()
-	actual := folderReader.filesStats
-	folderReader.filesStats = append(folderReader.filesStats, fileStat3)
-	folderReader.filesStats = append(folderReader.filesStats, fileStat2)
-	folderReader.filesStats = append(folderReader.filesStats, fileStat1)
-	expected := folderReader.filesStats
+	actual := folderReader.FilesStats
+	folderReader.FilesStats = append(folderReader.FilesStats, fileStat3)
+	folderReader.FilesStats = append(folderReader.FilesStats, fileStat2)
+	folderReader.FilesStats = append(folderReader.FilesStats, fileStat1)
+	expected := folderReader.FilesStats
 
 	if actual[0] != expected[0] || actual[1] != expected[1] || actual[2] != expected[2] {
 		t.Errorf("Expected: %v, and got: %v", expected, actual)

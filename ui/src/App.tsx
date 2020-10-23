@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from './logo_qohash.png';
+import logo from './assets/logo_qohash.png';
 import './App.css';
 import InputFolder from './components/InputFolder'
 
@@ -8,19 +8,11 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>
+      </header>
+      <p>
           Write the folder name, or leave it empty for actual folder:
         </p>
-          <InputFolder/>
-        <a
-          className="App-link"
-          href="https://qohash.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Qohash.com
-        </a>
-      </header>
+      <InputFolder folderName={""}/>
     </div>
   );
 }

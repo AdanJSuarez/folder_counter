@@ -42,13 +42,14 @@ func (fr *FolderReader) GetTotalNumberOfFiles() int64 {
 }
 
 // Read is used to set files stats and total size and number of files.
-func (fr *FolderReader) Read(folderName string) {
+func (fr *FolderReader) Read(folderName string) error {
 	if folderName == "" {
 		folderName = "."
 	}
 	file, err := os.Open(folderName)
 	if err != nil {
 		log.Printf("Failed opening directory: '%v' Please check the name.", folderName)
+		return err
 	}
 	defer file.Close()
 
@@ -57,6 +58,7 @@ func (fr *FolderReader) Read(folderName string) {
 		log.Println("Failed to read files:", err)
 	}
 	fr.setListOfFileStats(folderName, fileNames)
+	return nil
 }
 
 // setListOfFileStats is used to set listOfFileStats
