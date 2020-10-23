@@ -27,8 +27,7 @@ export default class InputFolder extends Component<IInputFolderProps, IInputFold
         .then((res: any)=> {
             if (typeof(res.data)==="string") {
                 this.setState({folderInfo:{filesStats: null, totalSize: 0, totalNumberOfFiles: 0}, notFound: true})
-            }
-            if (res.data.filesStats) {
+            } else if (res.data.filesStats) {
                 this.setState({folderInfo: res.data, notFound: false});
             } else {
                 this.setState({folderInfo:{filesStats: null, totalSize: 0, totalNumberOfFiles: 0}});
