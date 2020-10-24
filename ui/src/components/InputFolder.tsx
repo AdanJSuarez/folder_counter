@@ -12,20 +12,27 @@ interface IInputFolderState {
     notFound: boolean;
 }
 export default class InputFolder extends Component<IInputFolderProps, IInputFolderState> {
+    private api: API;
     constructor(props: IInputFolderProps) {
         super(props)
+        this.api = new API();
         this.state = {
-            folderName: "xxxoooxxx",
+            folderName: "",
             folderInfo: {filesStats:null, totalSize: 0, totalNumberOfFiles: 0},
             notFound: false
         };
         this.getFolderInfo = this.getFolderInfo.bind(this);
     }
-    private getFolderInfo(): any {
-        const api = new API();
-        api.getFolderInfo(this.state.folderName)
+    /**
+     * getFolderInfo set component state with the info received from the API.
+     *
+     * @private
+     * @memberof InputFolder
+     */
+    private getFolderInfo() {
+        this.api.getFolderInfo(this.state.folderName)
         .then((res: any)=> {
-            if (typeof(res.data)==="string") {
+            if (res.status === 204) {
                 this.setState({folderInfo:{filesStats: null, totalSize: 0, totalNumberOfFiles: 0}, notFound: true})
             } else if (res.data.filesStats) {
                 this.setState({folderInfo: res.data, notFound: false});

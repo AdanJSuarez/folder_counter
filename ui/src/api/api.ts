@@ -12,11 +12,15 @@ export default class API {
         this.port = ":5000";
         this.path = "/api/v1/folder/";
     }
-
+    /**
+     * getFolderInfo return a promise of http get call for reading folder info
+     * passed as parameter.
+     *
+     * @param {string} folderName
+     * @returns {Promise<any>}
+     * @memberof API
+     */
     public getFolderInfo(folderName: string): Promise<any> {
-        if (folderName === "") {
-            folderName = 'xxxoooxxx'
-        }
         return axios.get(this.url+this.port+this.path+folderName+"/");
     }
 }

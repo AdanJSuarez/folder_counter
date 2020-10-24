@@ -20,6 +20,7 @@ func readArgument() string {
 }
 
 func main() {
+	api := api.API{}
 	arg := readArgument()
 	if arg == "cli" {
 		cli.Init()
