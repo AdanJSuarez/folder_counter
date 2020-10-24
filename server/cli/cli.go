@@ -6,12 +6,12 @@ import (
 	"os"
 	"strings"
 
-	"github.com/AdanJSuarez/folder_counter/server/folderreader"
+	"github.com/AdanJSuarez/folder_counter/server/component"
 )
 
 // Init is use to initialize CLI
 func Init() {
-	fr := folderreader.FolderReader{}
+	f := component.Folder{}
 	reader := bufio.NewReader(os.Stdin)
 	textHeader()
 
@@ -23,10 +23,14 @@ func Init() {
 			fmt.Println("Thanks for using our software ;)")
 			os.Exit(0)
 		}
-		fr.Read(folderName)
-		fmt.Printf("Number of file: %v - Total size of the folder: %v\n", fr.GetTotalNumberOfFiles(), fr.GetTotalSize())
-		fmt.Println("List of folders and files in a beautiful JSON format:\n", fr.GetFilesStatsString())
-		fr = folderreader.FolderReader{}
+		f.New(folderName)
+		fmt.Printf("Number of file: %v - Total size of the folder: %v bytes\n", f.GetTotalFiles(), f.GetSize())
+		// fmt.Println("List of folders and files in a beautiful JSON format:\n", f.GetListOfComponent())
+
+		for _, v := range f.GetListOfComponent() {
+			fmt.Println(v)
+		}
+		f = component.Folder{}
 		fmt.Println("* End of files *")
 		textHeader()
 	}

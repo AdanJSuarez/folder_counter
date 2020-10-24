@@ -11,20 +11,20 @@ import (
 	"os"
 	"sort"
 
-	"github.com/AdanJSuarez/folder_counter/server/filestat"
+	"github.com/AdanJSuarez/folder_counter/server/component"
 )
 
 // FolderReader is a structure to handle reading folders and files from a specific folder.
 // If not folder is specified takes the actual folder where it is running.
 type FolderReader struct {
-	FilesStats         []filestat.FileStat `json:"filesStats"`
-	TotalSize          int64               `json:"totalSize"`
-	TotalNumberOfFiles int64               `json:"totalNumberOfFiles"`
+	ListOfComponent    []component.Component `json:"listOfComponents"`
+	TotalSize          int64                 `json:"totalSize"`
+	TotalNumberOfFiles int64                 `json:"totalNumberOfFiles"`
 }
 
 // GetFilesStatsString return a slice of all names
 func (fr *FolderReader) GetFilesStatsString() string {
-	jsonFileStats, err := json.MarshalIndent(fr.FilesStats, "  ", "")
+	jsonFileStats, err := json.MarshalIndent(fr.ListOfComponent, "  ", "")
 	if err != nil {
 		log.Printf("Failed to marshal files stats: %v", err)
 	}
@@ -46,49 +46,67 @@ func (fr *FolderReader) Read(folderName string) error {
 	if folderName == "" {
 		folderName = "."
 	}
-	file, err := os.Open(folderName)
+	component, err := os.Open(folderName)
 	if err != nil {
 		log.Printf("Failed opening directory: '%v' Please check the name.", folderName)
 		return err
 	}
-	defer file.Close()
+	defer component.Close()
 
-	fileNames, err := file.Readdirnames(0)
+	// componentNames, err := component.Readdirnames(0)
 	if err != nil {
 		log.Println("Failed to read files:", err)
 	}
-	fr.setListOfFileStats(folderName, fileNames)
+	// fr.setListOfComponent(folderName, componentNames)
+	fr.sortBySize()
 	return nil
 }
 
-// setListOfFileStats is used to set listOfFileStats
+// setListOfComponent is used to set listOfFileStats
 // A posible performance improvement could be insert files in order using BST (i.e.)
-func (fr *FolderReader) setListOfFileStats(folderName string, fileNames []string) {
-	for _, name := range fileNames {
-		fileStat := filestat.FileStat{}
-		fr.readStats(folderName+"/"+name, &fileStat)
-		fr.TotalSize += fileStat.GetFileSize()
-		fr.TotalNumberOfFiles++
-		fr.FilesStats = append(fr.FilesStats, fileStat)
-	}
-	fr.sortBySize()
-}
+// func (fr *FolderReader) setListOfComponent(folderName string, componentNames []string) {
+// 	for _, name := range componentNames {
+// 		file := component.File{}
+// 		folder := component.Folder{}
+// 		stats, err := os.Stat(name)
+// 		if err != nil {
+// 			log.Printf("Failed to read stats of %s: %v", name, err)
+// 		}
+// 		if stats.IsDir() {
+// 			fr.readStats(folderName+"/"+name, &folder)
+// 		} else {
+// 			file.SetName(name)
+// 			file.SetSize(stats.Size())
+// 			file.SetLastModification(stats.ModTime())
+// 			file.SetIsFolder(stats.IsDir())
+// 			fr.TotalSize += stats.Size()
+// 			fr.TotalNumberOfFiles++
+// 			fr.ListOfComponent = append(fr.ListOfComponent, &file)
+// 		}
+
+// 		// fr.TotalSize += file.GetSize()
+// 	}
+// }
 
 // readStats return the stats of a file of named fileName.
-func (fr *FolderReader) readStats(fileName string, fileStat *filestat.FileStat) {
+func (fr *FolderReader) readSize(fileName string, component component.Component) {
 	stats, err := os.Stat(fileName)
 	if err != nil {
 		log.Printf("Failed to read stats of %s: %v", fileName, err)
 	}
-	fileStat.SetFileName(fileName)
-	fileStat.SetFileSize(stats.Size())
-	fileStat.SetFileLastModification(stats.ModTime())
-	fileStat.SetIsDirectory(stats.IsDir())
+	if stats.IsDir() {
+		//component.SetSize(stats.Size())
+
+	} else {
+		fr.TotalSize += stats.Size()
+		fr.TotalNumberOfFiles++
+	}
+
 }
 
 // sortBySize set filesStats order by file size
 func (fr *FolderReader) sortBySize() {
-	sort.Slice(fr.FilesStats, func(i, j int) bool {
-		return fr.FilesStats[i].GetFileSize() > fr.FilesStats[j].GetFileSize()
+	sort.Slice(fr.ListOfComponent, func(i, j int) bool {
+		return fr.ListOfComponent[i].GetSize() > fr.ListOfComponent[j].GetSize()
 	})
 }
