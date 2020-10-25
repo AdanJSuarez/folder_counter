@@ -18,7 +18,7 @@ export default class InputFolder extends Component<IInputFolderProps, IInputFold
         this.api = new API();
         this.state = {
             folderName: "",
-            folderInfo: {filesStats:null, totalSize: 0, totalNumberOfFiles: 0},
+            folderInfo: {listOfComponent:null, totalSize: 0, totalNumberOfFiles: 0},
             notFound: false
         };
         this.getFolderInfo = this.getFolderInfo.bind(this);
@@ -29,19 +29,19 @@ export default class InputFolder extends Component<IInputFolderProps, IInputFold
      * @private
      * @memberof InputFolder
      */
-    private getFolderInfo() {
+    public getFolderInfo() {
         this.api.getFolderInfo(this.state.folderName)
         .then((res: any)=> {
             if (res.status === 204) {
-                this.setState({folderInfo:{filesStats: null, totalSize: 0, totalNumberOfFiles: 0}, notFound: true})
-            } else if (res.data.filesStats) {
+                this.setState({folderInfo:{listOfComponent: null, totalSize: 0, totalNumberOfFiles: 0}, notFound: true})
+            } else if (res.data.listOfComponent) {
                 this.setState({folderInfo: res.data, notFound: false});
             } else {
-                this.setState({folderInfo:{filesStats: null, totalSize: 0, totalNumberOfFiles: 0}});
+                this.setState({folderInfo:{listOfComponent: null, totalSize: 0, totalNumberOfFiles: 0}});
             }
         })
         .catch((err: any) => {
-            this.setState({folderInfo:{filesStats: null}});
+            this.setState({folderInfo:{listOfComponent: null}});
         })
     }
     render() {
@@ -56,7 +56,7 @@ export default class InputFolder extends Component<IInputFolderProps, IInputFold
                     <div>Total number of files: {filesInfo.totalNumberOfFiles}</div>
                 </div>
                 {
-                    filesInfo.filesStats ?
+                    filesInfo.listOfComponent ?
                         <table>
                             <tbody>
                                 <tr>
@@ -66,12 +66,12 @@ export default class InputFolder extends Component<IInputFolderProps, IInputFold
                                     <th>File is folder</th>
                                 </tr>
                                 {
-                                    filesInfo.filesStats.map((fileStat: any, index: number) =>
-                                    <tr>
-                                        <td  key={index+1}>{JSON.stringify(fileStat.fileName)}</td>
-                                        <td  key={index+2}>{JSON.stringify(fileStat.fileSize)}</td>
-                                        <td  key={index+3}>{JSON.stringify(fileStat.fileLastModification)}</td>
-                                        <td  key={index+4}>{JSON.stringify(fileStat.fileIsDirectory)}</td>
+                                    filesInfo.listOfComponent.map((component: any, index: number) =>
+                                    <tr key={index}>
+                                        <td  key={index+1}>{JSON.stringify(component.name)}</td>
+                                        <td  key={index+2}>{JSON.stringify(component.size)}</td>
+                                        <td  key={index+3}>{JSON.stringify(component.lastModification)}</td>
+                                        <td  key={index+4}>{JSON.stringify(component.isFolder)}</td>
                                     </tr>
                                     )
                                 }

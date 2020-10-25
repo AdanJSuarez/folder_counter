@@ -1,4 +1,4 @@
-module github.com/AdanJSuarez/folder_counter
+module github.com/AdanJSuarez/folder_counter/server
 
 go 1.15
 
