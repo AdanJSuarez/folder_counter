@@ -21,6 +21,6 @@ export default class API {
      * @memberof API
      */
     public getFolderInfo(folderName: string): Promise<any> {
-        return axios.get(this.url+this.port+this.path+folderName+"/");
+        return axios.post(this.url+this.port+this.path, folderName);
     }
 }

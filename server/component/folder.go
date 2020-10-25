@@ -9,12 +9,12 @@ import (
 
 // Folder represent a folder component.
 type Folder struct {
-	FolderName             string
-	FolderSize             int64
+	FolderName             string `json:"name"`
+	FolderSize             int64  `json:"size"`
 	FolderTotalFiles       int64
-	FolderLastModification time.Time
-	IsFolder               bool
-	ListOfComponent        []Component
+	FolderLastModification time.Time `json:"lastModification"`
+	IsFolder               bool      `json:"isFolder"`
+	listOfComponent        []Component
 }
 
 //GetName return the name of the folder
@@ -25,7 +25,7 @@ func (f Folder) GetName() string {
 // GetSize return the size of the folder
 func (f Folder) GetSize() int64 {
 	var result int64
-	for _, component := range f.ListOfComponent {
+	for _, component := range f.listOfComponent {
 		result += component.GetSize()
 	}
 	return result
@@ -33,7 +33,7 @@ func (f Folder) GetSize() int64 {
 
 // calculateSize calculate  and return the size of the folder.
 func (f Folder) calculateSize() int64 {
-	for _, component := range f.ListOfComponent {
+	for _, component := range f.listOfComponent {
 		stats, err := os.Stat(component.GetName())
 		if err != nil {
 			log.Printf("Error#1, Failed to read stats of %s: %v", component.GetName(), err)
@@ -50,7 +50,7 @@ func (f Folder) calculateSize() int64 {
 
 // GetTotalFiles return the number of file in this folder, including those in subfolder if any.
 func (f *Folder) GetTotalFiles() int64 {
-	for _, component := range f.ListOfComponent {
+	for _, component := range f.listOfComponent {
 		stats, err := os.Stat(component.GetName())
 		if err != nil {
 			log.Printf("Error#2, Failed to read stats of %s: %v", component.GetName(), err)
@@ -73,7 +73,7 @@ func (f Folder) GetLastModification() time.Time {
 
 // GetListOfComponent returns the list of all component of this folder.
 func (f Folder) GetListOfComponent() []Component {
-	return f.ListOfComponent
+	return f.listOfComponent
 }
 
 // GetIsFolder returns true because folder always is a folder.
@@ -121,8 +121,7 @@ func (f *Folder) New(folderName string) error {
 	return nil
 }
 
-// setListOfComponent is used to set listOfFileStats
-// A posible performance improvement could be insert files in order using BST (i.e.)
+// setListOfComponent is used to set the list of component of this folder
 func (f *Folder) setListOfComponent(folderName string) {
 	componentReader, err := os.Open(folderName)
 	if err != nil {
@@ -148,58 +147,20 @@ func (f *Folder) setListOfComponent(folderName string) {
 			folder.SetLastModification(stats.ModTime())
 			folder.setListOfComponent(folderName + "/" + name)
 			folder.SetSize(folder.calculateSize())
-			f.ListOfComponent = append(f.ListOfComponent, &folder)
+			f.listOfComponent = append(f.listOfComponent, &folder)
 		} else {
 			file.SetName(folderName + "/" + name)
 			file.SetSize(stats.Size())
 			file.SetLastModification(stats.ModTime())
 			file.SetIsFolder(stats.IsDir())
-			f.ListOfComponent = append(f.ListOfComponent, &file)
+			f.listOfComponent = append(f.listOfComponent, &file)
 		}
 	}
 }
 
 // sortBySize set filesStats order by file size
 func (f *Folder) sortBySize() {
-	sort.Slice(f.ListOfComponent, func(i, j int) bool {
-		return f.ListOfComponent[i].GetSize() > f.ListOfComponent[j].GetSize()
+	sort.Slice(f.listOfComponent, func(i, j int) bool {
+		return f.listOfComponent[i].GetSize() > f.listOfComponent[j].GetSize()
 	})
 }
-
-/*
-export default class Node {
-    private data: any;
-    private children: Node[];
-
-    constructor(data: any, children: Node[]){
-        this.data = data;
-        this.children = children;
-    }
-
-	public dfs(data: any):any{
-		function fnNode(n: Node, todo: Node[], visited: Node[], acc: number): any {
-			if(visited.includes(n)){
-				return fnLON(todo, visited, acc);
-			}
-			visited.push(n);
-			if(n.getData() === data){
-				return visited;
-			}
-			todo = n.getChildren().concat(todo);
-			acc += 1;
-			return fnLON(todo, visited, acc);
-		};
-		function fnLON(todo: Node[], visited: Node[], acc: number): any {
-			if (!todo.length){
-				return visited;
-			}
-			else{
-				return fnNode(todo[0], todo.slice(1), visited, acc);
-			}
-		}
-		return fnNode(this, [], [], 0);
-	}
-
-
-
-*/

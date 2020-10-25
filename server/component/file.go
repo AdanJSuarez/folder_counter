@@ -9,10 +9,10 @@ import "time"
 
 // File represent a file or a folder containing all relevant info.
 type File struct {
-	FileName             string    `json:"fileName"`
-	FileSize             int64     `json:"fileSize"`
-	FileLastModification time.Time `json:"fileLastModification"`
-	IsFolder             bool      `json:"fileIsFolder"`
+	FileName             string    `json:"name"`
+	FileSize             int64     `json:"size"`
+	FileLastModification time.Time `json:"lastModification"`
+	IsFolder             bool      `json:"isFolder"`
 }
 
 //GetName return the name of the file

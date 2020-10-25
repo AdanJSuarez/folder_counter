@@ -25,10 +25,9 @@ func Init() {
 		}
 		f.New(folderName)
 		fmt.Printf("Number of file: %v - Total size of the folder: %v bytes\n", f.GetTotalFiles(), f.GetSize())
-		// fmt.Println("List of folders and files in a beautiful JSON format:\n", f.GetListOfComponent())
-
 		for _, v := range f.GetListOfComponent() {
-			fmt.Println(v)
+			fmt.Printf("Name: %v - Size: %v - Folder: %v - Last modification: %v\n",
+				v.GetName(), v.GetSize(), v.GetIsFolder(), v.GetLastModification())
 		}
 		f = component.Folder{}
 		fmt.Println("* End of files *")
