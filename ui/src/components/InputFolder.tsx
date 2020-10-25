@@ -29,7 +29,7 @@ export default class InputFolder extends Component<IInputFolderProps, IInputFold
      * @private
      * @memberof InputFolder
      */
-    private getFolderInfo() {
+    public getFolderInfo() {
         this.api.getFolderInfo(this.state.folderName)
         .then((res: any)=> {
             if (res.status === 204) {
