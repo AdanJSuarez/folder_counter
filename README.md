@@ -35,7 +35,7 @@ This software is far from being well tested but I included only some cases becau
 
 To run all test:
 
-In server folder: `go test ./... -cover`
+In server folder: `go test ./...`
 
 ### How to run UI
 To run UI, you need to install all dependencies so first type:
@@ -57,8 +57,20 @@ You can run each service independetly but you can run both with `docker-compose 
 This software is so simple and not very useful for deploy it on the cloud. It makes more sense for using locally in a computer.
 For both cases this software need the following:
 * Write more unit tests (server and ui). It has some tests to show a bit how it works but it is far from been enough. We should
-run the test with coverage so depende on the minimum coverage set in the company we should add more test. We should not think that 100% coverage is a bug free software!
-
+run the test with coverage so depende on the minimum coverage set in the company it helps to know when is 'enough'. We should not think that 100% coverage is a bug free software!
 * In UI would be great to use a librery like bootstrap for React to get a prettier looking with almost zero efford.
+* It needs to set some kind of authentication and authorization mechanism: Oauth2, jwt, challenge, etc... it depends of the result of our risk analisys and how strong our security needs to be set.
+
+### Deploy this software:
+
+1.- A good idea is to have a domain like `https://www.myfilecounter.ca` It is not strictly necesary though. If we decide
+to go with one, we can have something like `https://www.myfilecounter.ca` for UI and `https://api.myfilecounter.ca` for API. We should hadler secure connections we need to set a certificate to make it `https` that allows us a encrypted communication between UI and the API. Cloud services make this process usually easy.
+
+2.- We need to decide the architecture, for example I know this software is going to be a complete success :-) and thousands of
+users are going to connect so we need to set something like: load balancer to distribute the work load among different instances of this software. A container orchestration service like AWS-Elastic Container Services or Kubernetes to handle those containers and scale them up (incrising demand) of down (decrese demand). We need a container registry where we deploy de Docker images like AWS-Elastic Container Registry, from where our orchestration solution is going to pick the Docker images. For this example we don't need database or broker message. If this software were more complex we can set some parts async for improving performance.
+
+In this matter to define and create the architecture we can create in our cloud provider or use a solution like Terraform that
+helps us to handle it.
+
 
 
