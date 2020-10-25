@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test suite for InputFolder should render equal to the snapshot 1`] = `
+"<div>
+  <input onChange={[Function: onChange]} />
+  <button onClick={[Function: bound getFolderInfo]}>
+    Submit
+  </button>
+  <div>
+    <div>
+      Total size: 
+      0
+    </div>
+    <div>
+      Total number of files: 
+      0
+    </div>
+  </div>
+</div>"
+`;

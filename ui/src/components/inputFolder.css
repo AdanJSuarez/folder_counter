@@ -1,0 +1,18 @@
+.file_name {
+    float: left;
+}
+.file_size {
+    float: left;
+}
+.last_modification {
+    float: left;
+}
+.is_directory {
+    float: left;
+}
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+    margin-left: auto;
+    margin-right: auto;
+  }

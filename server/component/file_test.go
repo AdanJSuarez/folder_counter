@@ -1,17 +1,17 @@
-package filestat
+package component
 
 import (
 	"testing"
 	"time"
 )
 
-var fileStat FileStat = FileStat{}
+var file File = File{}
 
 // It should assign and retrieve the right name.
 func TestSetandGetName(t *testing.T) {
-	fileStat.SetFileName("Rambo")
+	file.SetName("Rambo")
 
-	actual := fileStat.GetFileName()
+	actual := file.GetName()
 	expected := "Rambo"
 
 	if actual != expected {
@@ -21,8 +21,8 @@ func TestSetandGetName(t *testing.T) {
 
 // It should assign and retrieve the right size.
 func TestSetandGetSize(t *testing.T) {
-	fileStat.SetFileSize(123)
-	actual := fileStat.GetFileSize()
+	file.SetSize(123)
+	actual := file.GetSize()
 	expected := int64(123)
 	if actual != expected {
 		t.Errorf("Expected: %v, and got: %v", expected, actual)
@@ -32,8 +32,8 @@ func TestSetandGetSize(t *testing.T) {
 // It should assign and retrieve the right last modification time.
 func TestSetandGetLastModification(t *testing.T) {
 	nowTime := time.Now()
-	fileStat.SetFileLastModification(nowTime)
-	actual := fileStat.GetFileLastModification()
+	file.SetLastModification(nowTime)
+	actual := file.GetLastModification()
 	expected := nowTime
 	if actual != expected {
 		t.Errorf("Expected: %v, and got: %v", expected, actual)
@@ -42,8 +42,8 @@ func TestSetandGetLastModification(t *testing.T) {
 
 // It should assign and retrieve if it is a directory/folder.
 func TestSetandGetIsDirectory(t *testing.T) {
-	fileStat.SetIsDirectory(false)
-	actual := fileStat.GetIsDirectory()
+	file.SetIsFolder(false)
+	actual := file.GetIsFolder()
 	expected := false
 	if actual != expected {
 		t.Errorf("Expected: %v, and got: %v", expected, actual)
@@ -52,13 +52,13 @@ func TestSetandGetIsDirectory(t *testing.T) {
 
 // It should assign and retrieve and modify the name.
 func TestModifyField(t *testing.T) {
-	actual1 := fileStat.GetFileName()
+	actual1 := file.GetName()
 	expected1 := "Rambo"
 	if actual1 != expected1 {
 		t.Errorf("Expected: %v, and got: %v", expected1, actual1)
 	}
-	fileStat.SetFileName("Conan")
-	actual2 := fileStat.GetFileName()
+	file.SetName("Conan")
+	actual2 := file.GetName()
 	expected2 := "Conan"
 	if actual2 != expected2 {
 		t.Errorf("Expected: %v, and got: %v", expected2, actual2)
