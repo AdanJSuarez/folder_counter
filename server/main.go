@@ -21,6 +21,7 @@ func readArgument() string {
 
 func main() {
 	api := api.API{}
+	cli := cli.CLI{}
 	arg := readArgument()
 	if arg == "cli" {
 		cli.Init()

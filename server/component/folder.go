@@ -31,23 +31,6 @@ func (f Folder) GetSize() int64 {
 	return result
 }
 
-// calculateSize calculate  and return the size of the folder.
-func (f Folder) calculateSize() int64 {
-	for _, component := range f.listOfComponent {
-		stats, err := os.Stat(component.GetName())
-		if err != nil {
-			log.Printf("Error#1, Failed to read stats of %s: %v", component.GetName(), err)
-			return f.FolderSize
-		}
-		if stats.IsDir() {
-			f.FolderSize += component.GetSize()
-		} else {
-			f.FolderSize += stats.Size()
-		}
-	}
-	return f.FolderSize
-}
-
 // GetTotalFiles return the number of file in this folder, including those in subfolder if any.
 func (f *Folder) GetTotalFiles() int64 {
 	for _, component := range f.listOfComponent {
@@ -156,6 +139,23 @@ func (f *Folder) setListOfComponent(folderName string) {
 			f.listOfComponent = append(f.listOfComponent, &file)
 		}
 	}
+}
+
+// calculateSize calculate  and return the size of the folder.
+func (f Folder) calculateSize() int64 {
+	for _, component := range f.listOfComponent {
+		stats, err := os.Stat(component.GetName())
+		if err != nil {
+			log.Printf("Error#1, Failed to read stats of %s: %v", component.GetName(), err)
+			return f.FolderSize
+		}
+		if stats.IsDir() {
+			f.FolderSize += component.GetSize()
+		} else {
+			f.FolderSize += stats.Size()
+		}
+	}
+	return f.FolderSize
 }
 
 // sortBySize set filesStats order by file size
