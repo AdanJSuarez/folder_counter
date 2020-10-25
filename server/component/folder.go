@@ -33,19 +33,6 @@ func (f Folder) GetSize() int64 {
 
 // GetTotalFiles return the number of file in this folder, including those in subfolder if any.
 func (f *Folder) GetTotalFiles() int64 {
-	for _, component := range f.listOfComponent {
-		stats, err := os.Stat(component.GetName())
-		if err != nil {
-			log.Printf("Error#2, Failed to read stats of %s: %v", component.GetName(), err)
-			return f.FolderTotalFiles
-		}
-		if stats.IsDir() {
-			folder, _ := component.(*Folder)
-			f.FolderTotalFiles += folder.GetTotalFiles()
-		} else {
-			f.FolderTotalFiles++
-		}
-	}
 	return f.FolderTotalFiles
 }
 
@@ -91,7 +78,9 @@ func (f *Folder) SetIsFolder(isFolder bool) {
 
 // New is used to set files stats and total size and number of files.
 func (f *Folder) New(folderName string) error {
-	folderName = "./" + folderName
+	if folderName == "" {
+		folderName = "./" + folderName
+	}
 	stats, err := os.Stat(folderName)
 	if err != nil {
 		log.Printf("Error#3, Failed to read folder %s: %v", folderName, err)
@@ -104,16 +93,15 @@ func (f *Folder) New(folderName string) error {
 	return nil
 }
 
-// setListOfComponent is used to set the list of component of this folder
-func (f *Folder) setListOfComponent(folderName string) {
+// setListOfComponent is used to set the list of component of this folder.
+// It traverse the tree in a depth-first search (DFS) manner.
+func (f *Folder) setListOfComponent(folderName string) (int64, int64) {
 	componentReader, err := os.Open(folderName)
 	if err != nil {
 		log.Printf("Error#4, Failed opening directory: '%v' Please check the name.", folderName)
 	}
 	defer componentReader.Close()
-
 	componentNames, err := componentReader.Readdirnames(0)
-
 	if err != nil {
 		log.Println("Error#5, Failed to read files:", err)
 	}
@@ -125,37 +113,34 @@ func (f *Folder) setListOfComponent(folderName string) {
 			log.Printf("Error#6, Failed to read stats of %s: %v", name, err)
 		}
 		if stats.IsDir() {
-			folder.SetName(folderName + "/" + name)
-			folder.SetIsFolder(true)
-			folder.SetLastModification(stats.ModTime())
-			folder.setListOfComponent(folderName + "/" + name)
-			folder.SetSize(folder.calculateSize())
-			f.listOfComponent = append(f.listOfComponent, &folder)
+			f.setFolderData(folderName, name, &folder, stats)
 		} else {
-			file.SetName(folderName + "/" + name)
-			file.SetSize(stats.Size())
-			file.SetLastModification(stats.ModTime())
-			file.SetIsFolder(stats.IsDir())
-			f.listOfComponent = append(f.listOfComponent, &file)
+			f.setFileData(folderName, name, &file, stats)
 		}
 	}
+	return f.FolderSize, f.FolderTotalFiles
 }
 
-// calculateSize calculate  and return the size of the folder.
-func (f Folder) calculateSize() int64 {
-	for _, component := range f.listOfComponent {
-		stats, err := os.Stat(component.GetName())
-		if err != nil {
-			log.Printf("Error#1, Failed to read stats of %s: %v", component.GetName(), err)
-			return f.FolderSize
-		}
-		if stats.IsDir() {
-			f.FolderSize += component.GetSize()
-		} else {
-			f.FolderSize += stats.Size()
-		}
-	}
-	return f.FolderSize
+// setFolderData set the data in a folder component.
+func (f *Folder) setFolderData(folderName string, name string, folder *Folder, stats os.FileInfo) {
+	folder.SetName(folderName + "/" + name)
+	folder.SetIsFolder(true)
+	folder.SetLastModification(stats.ModTime())
+	size, totalFiles := folder.setListOfComponent(folderName + "/" + name)
+	f.FolderSize += size
+	f.FolderTotalFiles += totalFiles
+	f.listOfComponent = append(f.listOfComponent, folder)
+}
+
+// setFileData set the data in a file component.
+func (f *Folder) setFileData(folderName string, name string, file *File, stats os.FileInfo) {
+	file.SetName(folderName + "/" + name)
+	file.SetSize(stats.Size())
+	file.SetLastModification(stats.ModTime())
+	file.SetIsFolder(stats.IsDir())
+	f.FolderSize += stats.Size()
+	f.FolderTotalFiles++
+	f.listOfComponent = append(f.listOfComponent, file)
 }
 
 // sortBySize set filesStats order by file size
