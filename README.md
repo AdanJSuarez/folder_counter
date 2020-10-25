@@ -45,3 +45,6 @@ When all the dependecies are installed you need to type:
 ## How to run unit test
 You have to first install dependencies from the previous step, and then type:
 `npm test --prefix ui`
+
+## How to run with docker
+You can run each service independetly but you can run both with `docker-compose up`. It is a good practice build them first with `docker-compose build` and everytime that there is a change. Usually `docker-compose up` build them for you the first time but if you change anything this last instruction doesn't re-build the images.
