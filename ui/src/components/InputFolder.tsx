@@ -32,7 +32,6 @@ export default class InputFolder extends Component<IInputFolderProps, IInputFold
     private getFolderInfo() {
         this.api.getFolderInfo(this.state.folderName)
         .then((res: any)=> {
-            console.log(res.data) ///////////
             if (res.status === 204) {
                 this.setState({folderInfo:{listOfComponent: null, totalSize: 0, totalNumberOfFiles: 0}, notFound: true})
             } else if (res.data.listOfComponent) {
@@ -68,7 +67,7 @@ export default class InputFolder extends Component<IInputFolderProps, IInputFold
                                 </tr>
                                 {
                                     filesInfo.listOfComponent.map((component: any, index: number) =>
-                                    <tr>
+                                    <tr key={index}>
                                         <td  key={index+1}>{JSON.stringify(component.name)}</td>
                                         <td  key={index+2}>{JSON.stringify(component.size)}</td>
                                         <td  key={index+3}>{JSON.stringify(component.lastModification)}</td>
