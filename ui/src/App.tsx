@@ -10,7 +10,7 @@ function App() {
         <img src={logo} className="App-logo" alt="logo" />
       </header>
       <p>
-          Write the folder name, or leave it empty for actual folder:
+          Write the folder name, or leave it empty for ./ folder:
         </p>
       <InputFolder folderName={""}/>
     </div>

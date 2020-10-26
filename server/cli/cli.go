@@ -44,7 +44,7 @@ func (cli *CLI) Init() {
 
 func (cli *CLI) textHeader() {
 	fmt.Println("")
-	fmt.Println("Type folder name or leave empty for actual folder")
+	fmt.Println("Type folder name or leave empty for ./ folder")
 	fmt.Println("Type EXIT to close the program")
 	fmt.Println("---------------------")
 }
