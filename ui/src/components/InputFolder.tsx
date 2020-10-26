@@ -63,7 +63,7 @@ export default class InputFolder extends Component<IInputFolderProps, IInputFold
                                     <th>File name</th>
                                     <th>File size</th>
                                     <th>Last modification</th>
-                                    <th>File is folder</th>
+                                    <th>Folder</th>
                                 </tr>
                                 {
                                     filesInfo.listOfComponent.map((component: any, index: number) =>
