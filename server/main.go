@@ -15,6 +15,8 @@ import (
 	"github.com/AdanJSuarez/folder_counter/server/api"
 )
 
+// readArgument read the argument the user pass when running the software.
+// It set 'api' if no argument passed.
 func readArgument() string {
 	if len(os.Args) > 1 {
 		return os.Args[1]

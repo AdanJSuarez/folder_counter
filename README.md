@@ -58,8 +58,8 @@ You have to first install dependencies from the previous step, and then type:
 ### How to run with docker
 You can run each service independently, and you can run both together with `docker-compose up`. It is a good practice to build them first with `docker-compose build` and everytime that there is a change. Usually `docker-compose up` builds them for you the first time but if you change anything this last instruction doesn't re-build the images.
 
-I set production lever for docker-compose, so if you run the software using it you should go in a browser using port 80:
-`http://localhost`
+Once are running type:
+`http://localhost:3000`
 
 
 ## Get production ready

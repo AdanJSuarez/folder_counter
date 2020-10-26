@@ -30,6 +30,7 @@ func (api *API) Init() {
 	api.app.Listen(":5000")
 }
 
+// readFolderName set a new folder and populate the whole tree of components.
 func (api *API) readFolderName(folderName string, c *fiber.Ctx) error {
 	log.Println("Folder name received:", folderName)
 	readErr := api.f.New(folderName)

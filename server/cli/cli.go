@@ -42,6 +42,7 @@ func (cli *CLI) Init() {
 	}
 }
 
+// textHeader is the header to show when the user start the software as CLI.
 func (cli *CLI) textHeader() {
 	fmt.Println("")
 	fmt.Println("Type folder name or leave empty for ./ folder")
