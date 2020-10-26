@@ -11,7 +11,7 @@ The app should list the folders and files in a source folder. The list should be
 - the app should be production-ready. (no need to do everything,  you could list what left to be prod-ready)
 - the app should run on a unix system (i.e. ubuntu)
 
-### How to run server
+### How to run server/API
 This software needs Golang installed, if you don't have it, please install it following the instruction found here:
 
 `https://golang.org/`
@@ -37,18 +37,29 @@ To run all test:
 In the server folder: `go test ./...`
 
 ### How to run UI
-To run UI, you need to install all dependencies so first type:
-`npm install --prefix ui`
+This software needs NodeJs (NPM or Yarn) if you don't have it, please install it following the instruction found here:
+
+`https://nodejs.org`
+
+Once you have it, you could run it typing the following:
+
+In ui folder, you need to install all dependencies so first type:
+`npm install`
 
 When all the dependencies are installed you need to type:
-`npm start --prefix ui`
+`npm start`
+
+Go to a browser and type: `http://localhost:3000`
 
 ### How to run unit test
 You have to first install dependencies from the previous step, and then type:
-`npm test --prefix ui`
+`npm test`
 
 ### How to run with docker
-You can run each service independently but you can run both with `docker-compose up`. It is a good practice to build them first with `docker-compose build` and everytime that there is a change. Usually `docker-compose up` builds them for you the first time but if you change anything this last instruction doesn't re-build the images.
+You can run each service independently, and you can run both together with `docker-compose up`. It is a good practice to build them first with `docker-compose build` and everytime that there is a change. Usually `docker-compose up` builds them for you the first time but if you change anything this last instruction doesn't re-build the images.
+
+I set production lever for docker-compose, so if you run the software using it you should go in a browser using port 80:
+`http://localhost`
 
 
 ## Get production ready
