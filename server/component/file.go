@@ -1,8 +1,3 @@
-/**
-Adan J. Suarez
-e: adanjsuarez@gmail.com
-*/
-
 package component
 
 import "time"
@@ -15,7 +10,7 @@ type File struct {
 	IsFolder             bool      `json:"isFolder"`
 }
 
-//GetName return the name of the file
+// GetName return the name of the file
 func (f *File) GetName() string {
 	return f.FileName
 }
@@ -50,7 +45,7 @@ func (f *File) SetLastModification(lastModification time.Time) {
 	f.FileLastModification = lastModification
 }
 
-//SetIsFolder set true if file is directory/folder, false otherwise
+// SetIsFolder set true if file is directory/folder, false otherwise
 func (f *File) SetIsFolder(isFolder bool) {
 	f.IsFolder = isFolder
 }
