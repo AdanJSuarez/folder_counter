@@ -1,3 +1,4 @@
+#!/bin/sh
 # Build project for server linux.
 
 mkdir server/bin
